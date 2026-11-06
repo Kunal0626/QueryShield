@@ -41,4 +41,20 @@ public record DetectorConfig(
     public static DetectorConfig v2() {
         return new DetectorConfig("v2-normalized", true, Decision.ANY_MATCH, 1, false);
     }
+
+    /**
+     * Default v3 block threshold, chosen by tuning on the dev split (see the
+     * eval report's threshold sweep): the lowest threshold that keeps every
+     * single weak signal (a lone {@code --}, a lone apostrophe) below the block
+     * line while still catching the attacks.
+     */
+    public static final int V3_THRESHOLD = 3;
+
+    public static DetectorConfig v3() {
+        return v3(V3_THRESHOLD);
+    }
+
+    public static DetectorConfig v3(int threshold) {
+        return new DetectorConfig("v3-rules", true, Decision.SCORE, threshold, true);
+    }
 }

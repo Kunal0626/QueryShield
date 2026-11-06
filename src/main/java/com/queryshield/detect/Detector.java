@@ -2,6 +2,7 @@ package com.queryshield.detect;
 
 import com.queryshield.normalize.Normalized;
 import com.queryshield.normalize.Normalizer;
+import com.queryshield.rules.RuleEngine;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -26,7 +27,7 @@ public final class Detector {
     private final DetectorConfig config;
     private final Normalizer normalizer = new Normalizer();
     private final SignatureSet signatures;
-    // Phase 6 adds a RuleEngine here, gated by config.useRules().
+    private final RuleEngine rules = new RuleEngine();
 
     public Detector(DetectorConfig config, SignatureSet signatures) {
         this.config = config;
@@ -56,7 +57,9 @@ public final class Detector {
         }
 
         List<Finding> findings = new ArrayList<>(signatures.find(text, norm));
-        // Phase 6: if (config.useRules()) findings.addAll(rules.apply(text, norm));
+        if (config.useRules()) {
+            findings.addAll(rules.apply(text, norm));
+        }
 
         int score = 0;
         for (Finding f : findings) {
