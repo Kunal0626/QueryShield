@@ -1,5 +1,20 @@
+# compiled output
 *.class
-target/
 out/
+target/
+
+# downloaded dependencies (recreated by `make deps`, checksum-verified)
+lib/
+
+# local-only DB credentials for the demo app (never commit)
+victim/local.properties
+
+# IDE / OS noise
 .idea/
+.vscode/
+*.iml
 .DS_Store
+
+# transient eval artifacts (committed results live in eval/results/*.md and *.csv)
+eval/results/*.tmp
+*.log
