@@ -35,9 +35,18 @@ APPUSER=qsdemo
 DBHOST=127.0.0.1
 DBPORT=3306
 
-# Random, local-only password for the demo account. Alnum only, so it needs no
-# quoting/escaping anywhere it is used.
-PASS="$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 24)"
+# Random, local-only password for the demo account. Hex only, so it needs no
+# quoting/escaping anywhere it is used. Single command (no pipe) so it cannot
+# trip `set -o pipefail` via SIGPIPE; fall back to /dev/urandom if openssl is
+# somehow absent.
+PASS="$(openssl rand -hex 18 2>/dev/null || true)"
+if [ -z "$PASS" ]; then
+  PASS="$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom 2>/dev/null | head -c 24 || true)"
+fi
+if [ -z "$PASS" ]; then
+  echo "error: could not generate a random password" >&2
+  exit 1
+fi
 
 echo "QueryShield demo DB setup"
 echo "  database : $DB"
@@ -47,21 +56,27 @@ echo "You will now be asked for your MySQL ROOT password (by MySQL, not by us)."
 echo
 
 # One combined stream => root is prompted exactly once. schema.sql/seed.sql
-# contain no USE statement; we select the database first here.
-{
+# contain no USE statement; we select the database first here. If mysql fails
+# (wrong password, server down, ...) pipefail + set -e abort BEFORE we write
+# local.properties, so a failed run never leaves stale credentials behind.
+if ! {
   cat <<SQL
 CREATE DATABASE IF NOT EXISTS \`$DB\`
   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER IF NOT EXISTS '$APPUSER'@'localhost' IDENTIFIED BY '$PASS';
 ALTER USER '$APPUSER'@'localhost' IDENTIFIED BY '$PASS';
-REVOKE ALL PRIVILEGES, GRANT OPTION FROM '$APPUSER'@'localhost';
 GRANT SELECT ON \`$DB\`.* TO '$APPUSER'@'localhost';
 FLUSH PRIVILEGES;
 USE \`$DB\`;
 SQL
   cat "$SQL_DIR/schema.sql"
   cat "$SQL_DIR/seed.sql"
-} | mysql -u root -p --host="$DBHOST" --port="$DBPORT"
+} | mysql -u root -p --host="$DBHOST" --port="$DBPORT"; then
+  echo >&2
+  echo "error: MySQL setup failed (see the message above)." >&2
+  echo "       Common cause: wrong root password, or the server is not running." >&2
+  exit 1
+fi
 
 # Write the gitignored local credentials file with restrictive permissions.
 umask 077
@@ -79,4 +94,4 @@ echo "Done."
 echo "  loaded   : schema + fake seed data"
 echo "  wrote    : $PROPS  (gitignored, chmod 600)"
 echo
-echo "Next: start the demo app with  ->  make victim"
+echo "Next: tell Claude it is set up, or run  ->  make victim"
