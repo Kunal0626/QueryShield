@@ -1,0 +1,89 @@
+# QueryShield attack signatures.
+#
+# Format: one signature per line, "weight|pattern".
+#   - weight: integer used by the v3 scoring detector (Phase 6). The v1/v2
+#     detectors ignore it and block on ANY match.
+#   - pattern: matched against the LOWERCASED (v1) or fully NORMALIZED (v2/v3)
+#     field value, so patterns are written lowercase.
+# Lines starting with '#' and blank lines are ignored.
+#
+# These are intentionally literal substrings; structure that needs context
+# (a quote followed by a comment, a bare tautology) is handled by the Phase 6
+# tokenizer rules instead, not by widening these into false-positive machines.
+# A few low-precision signatures (--, 0x, '=') are kept on purpose: they show
+# the precision problem that the Phase 6 rules then fix in the before/after.
+
+# --- tautology / boolean logic ---
+3|' or
+3|" or
+3|' and
+3|) or (
+4|or 1=1
+4|and 1=1
+4|and 1=2
+3|or '1'='1
+2|'='
+
+# --- union-based ---
+5|union select
+5|union all select
+5|union distinct select
+
+# --- error-based ---
+5|extractvalue(
+5|updatexml(
+4|floor(rand
+3|exp(~
+4|gtid_subset(
+3|procedure analyse
+3|convert(int,
+4|utl_inaddr
+3|json_keys(
+
+# --- schema / information disclosure ---
+4|information_schema
+2|@@version
+2|version()
+2|database()
+2|user()
+3|schema_name
+3|table_name
+
+# --- time-based ---
+5|sleep(
+5|benchmark(
+5|pg_sleep(
+5|waitfor delay
+5|rlike sleep
+
+# --- stacked queries / data modification ---
+6|xp_cmdshell
+5|drop table
+5|; drop
+4|; insert
+4|; update
+4|; delete
+4|; create
+4|; alter
+5|; truncate
+5|; grant
+6|; shutdown
+3|exec(
+
+# --- subqueries / functions common in payloads ---
+3|(select
+3|exists(select
+2|concat(
+3|concat(0x
+2|char(
+2|ascii(
+2|substr(
+2|substring(
+3|cast(
+2|load_file(
+5|into outfile
+5|into dumpfile
+
+# --- obfuscation / comment markers (low precision on purpose) ---
+1|0x
+2|--
