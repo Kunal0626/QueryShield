@@ -13,6 +13,7 @@
 #   make victim    run the (deliberately vulnerable) demo app   on :8081
 #   make proxy     run the QueryShield proxy                    on :8080  (phase 7)
 #   make eval      run the offline evaluation harness                     (phase 5+)
+#   make e2e       end-to-end: exploits blocked via proxy, + --safe comparison
 #   make loadtest  run the throughput/latency load generator              (phase 9)
 #   make clean     remove compiled output
 #   make distclean also remove downloaded jars
@@ -61,7 +62,7 @@ MAIN_SRCS    := $(shell find $(SRC_MAIN) -name '*.java' 2>/dev/null)
 TEST_SRCS    := $(shell find $(SRC_TEST) -name '*.java' 2>/dev/null)
 
 .DEFAULT_GOAL := build
-.PHONY: deps build test victim proxy eval loadtest clean distclean help
+.PHONY: deps build test victim proxy eval e2e loadtest clean distclean help
 
 # ----------------------------------------------------------------------------
 help:
@@ -123,6 +124,9 @@ proxy: build
 
 eval: build
 	@$(JAVA) -cp "$(CP_MAIN)" com.queryshield.eval.EvalHarness $(ARGS)
+
+e2e: build
+	@bash e2e_test.sh
 
 loadtest: build
 	@$(JAVA) -cp "$(CP_MAIN)" com.queryshield.eval.LoadGen $(ARGS)
