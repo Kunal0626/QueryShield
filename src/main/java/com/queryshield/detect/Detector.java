@@ -38,18 +38,26 @@ public final class Detector {
         return config;
     }
 
+    /** Inspect a value using form/query semantics ('+' means space). */
+    public Verdict inspect(String field, String raw) {
+        return inspect(field, raw, true);
+    }
+
     /**
      * Inspect one field value.
      *
-     * @param field the field's name (query param, header, JSON key) -- carried
-     *              for logging; it does not affect the decision
-     * @param raw   the raw value exactly as received (still encoded)
+     * @param field       the field's name (query param, header, JSON key) --
+     *                    carried for logging; it does not affect the decision
+     * @param raw         the raw value exactly as received (still encoded)
+     * @param plusIsSpace whether '+' should decode to a space: true for query
+     *                    and form values, false for JSON strings, headers and
+     *                    path segments where '+' is a literal
      */
-    public Verdict inspect(String field, String raw) {
+    public Verdict inspect(String field, String raw, boolean plusIsSpace) {
         Normalized norm = null;
         String text;
         if (config.normalize()) {
-            norm = normalizer.normalize(raw);
+            norm = normalizer.normalize(raw, plusIsSpace);
             text = norm.value();
         } else {
             // v1 baseline: the most naive preprocessing anyone would do.
