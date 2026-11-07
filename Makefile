@@ -129,7 +129,7 @@ e2e: build
 	@bash e2e_test.sh
 
 loadtest: build
-	@$(JAVA) -cp "$(CP_MAIN)" com.queryshield.eval.LoadGen $(ARGS)
+	@bash loadtest.sh $(ARGS)
 
 # --- housekeeping -----------------------------------------------------------
 clean:
