@@ -94,4 +94,4 @@ echo "Done."
 echo "  loaded   : schema + fake seed data"
 echo "  wrote    : $PROPS  (gitignored, chmod 600)"
 echo
-echo "Next: tell Claude it is set up, or run  ->  make victim"
+echo "Next: run  ->  make victim"
