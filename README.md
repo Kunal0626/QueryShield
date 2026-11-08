@@ -69,8 +69,8 @@ required. `make deps` fetches exactly two jars (MySQL Connector/J and the JUnit
 console launcher) from Maven Central and verifies each against a pinned SHA-256.
 
 ```bash
-git clone https://github.com/Kunal0626/queryshield.git
-cd queryshield
+git clone https://github.com/Kunal0626/QueryShield.git
+cd QueryShield
 make deps          # fetch + checksum the two dependency jars
 make build         # javac --release 21 -> out/
 make test          # 562 tests (incl. a 500-run Aho-Corasick property test)
